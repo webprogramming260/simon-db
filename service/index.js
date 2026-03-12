@@ -54,8 +54,7 @@ apiRouter.post('/auth/login', async (req, res) => {
 apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    delete user.token;
-    DB.updateUser(user);
+    await DB.updateUserRemoveAuth(user);
   }
   res.clearCookie(authCookieName);
   res.status(204).end();
@@ -79,7 +78,7 @@ apiRouter.get('/scores', verifyAuth, async (req, res) => {
 
 // SubmitScore
 apiRouter.post('/score', verifyAuth, async (req, res) => {
-  const scores = updateScores(req.body);
+  const scores = await updateScores(req.body);
   res.send(scores);
 });
 

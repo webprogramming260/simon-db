@@ -34,6 +34,10 @@ async function updateUser(user) {
   await userCollection.updateOne({ email: user.email }, { $set: user });
 }
 
+async function updateUserRemoveAuth(user) {
+  await userCollection.updateOne({ email: user.email }, { $unset: { token: 1 } });
+}
+
 async function addScore(score) {
   return scoreCollection.insertOne(score);
 }
@@ -53,6 +57,7 @@ module.exports = {
   getUserByToken,
   addUser,
   updateUser,
+  updateUserRemoveAuth,
   addScore,
   getHighScores,
 };
